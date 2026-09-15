@@ -1,0 +1,5 @@
+User-agent: GPTBot
+Allow: /docs/
+
+User-agent: ClaudeBot
+Allow: /docs/
