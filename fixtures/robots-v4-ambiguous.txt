@@ -1,0 +1,3 @@
+User-agent: GPTBot
+Allow: /docs/private/
+Disallow: /docs/private/
