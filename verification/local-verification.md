@@ -9,4 +9,4 @@
 - State tests cover append-only parent links, duplicate commits, assess-once behavior, creator-only deactivation and invalid configuration preserving counters.
 - Static tests prove the contract contains GenLayer web/LLM/consensus primitives and does not contain the previous authorization lifecycle.
 
-Studionet source parity and live transaction evidence remain pending deployment.
+Studionet source parity and live transaction evidence are recorded in `studionet-verification.md`.
