@@ -1,5 +1,6 @@
 User-agent: GPTBot
 Allow: /docs/
+Disallow: /docs/private/
 
 User-agent: ClaudeBot
 Allow: /docs/
