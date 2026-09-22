@@ -1,35 +1,50 @@
-# Studionet verification
+# StudioNet verification — remediated deployment
 
-## Deployment and source parity
+Verified 2026-09-22.
 
-- Contract: `0x67099434f4e200862238DfdF9065BE8B827F26ef`
-- Explorer: https://explorer-studio.genlayer.com/address/0x67099434f4e200862238DfdF9065BE8B827F26ef
+## Deployment and parity
+
+- Contract: [`0x5ad3db5e6658868dbad1e35538871B2c76a68f10`](https://explorer-studio.genlayer.com/address/0x5ad3db5e6658868dbad1e35538871B2c76a68f10)
 - Chain ID: `61999`
-- Local and deployed source SHA-256: `ac9a0c860fc2cc84ce75e01b9c5b4969fbcd7608f88d2d7599eed4f2e369799b`
+- Deployed source SHA-256: `a2f8fb9ecba3b9fb0ff83537cfd57080665fb82ea55422dc971c6b3923dfd642`
+- Local source SHA-256: `a2f8fb9ecba3b9fb0ff83537cfd57080665fb82ea55422dc971c6b3923dfd642`
 - Exact source parity: `true`
-- Initial readback: `watch_count=0`, `snapshot_count=0`, `alert_count=0`
+- Initial counters: watches `0`, snapshots `0`, alerts `0`
 
-## Verified lifecycle
+The deployer receives no watch role. A separate test wallet created the watch; another test wallet exercised unauthorized append.
 
-- Create watch: [`0x671d914e28f4ad02534bc55b91193730a2c6f1a5c47c091a8fe35bef03ca035e`](https://explorer-studio.genlayer.com/tx/0x671d914e28f4ad02534bc55b91193730a2c6f1a5c47c091a8fe35bef03ca035e)
-- Append baseline: [`0x6ea8896e201a60f9f274123ebebb5c4ce65977c696f13c7aff2983b7f289c17b`](https://explorer-studio.genlayer.com/tx/0x6ea8896e201a60f9f274123ebebb5c4ce65977c696f13c7aff2983b7f289c17b)
-- Assess baseline: [`0x634ced1af00d05866681341189999064a50acc94200c62effb195e0602dd4e7c`](https://explorer-studio.genlayer.com/tx/0x634ced1af00d05866681341189999064a50acc94200c62effb195e0602dd4e7c)
-- Append restricted snapshot: [`0x99e157cf1490fe9a6441071c5df9aaf976798f117d0d4497d1ec58bddaf25758`](https://explorer-studio.genlayer.com/tx/0x99e157cf1490fe9a6441071c5df9aaf976798f117d0d4497d1ec58bddaf25758)
-- Assess restricted snapshot: [`0x51c8aa99af263e02a564c03d7f3a70f7efe950995bb079ffdae109716018ae8b`](https://explorer-studio.genlayer.com/tx/0x51c8aa99af263e02a564c03d7f3a70f7efe950995bb079ffdae109716018ae8b)
+## Finalized transactions
 
-Authoritative readback after the lifecycle:
+The SDK returned final status `7` for every transaction.
 
-- Baseline: `BASELINE_VERIFIED`, `provenance_ok=true`, parent `-1`.
-- Restricted snapshot: `ACCESS_RESTRICTED`, `provenance_ok=true`, parent snapshot `0`.
-- Alert: `ACCESS_RESTRICTED`, affected pair `gptbot|/docs/private/`.
-- Counts: one watch, two snapshots, one alert.
+| Operation | Transaction | Authoritative effect |
+|---|---|---|
+| Create watch | [`0x3aeb…dc40`](https://explorer-studio.genlayer.com/tx/0x3aeb91fe5923da855da54247c8ad4bef5f03673c81f7f7b44ddb731f0cc0dc40) | Creates watch 0 with creator derived from sender |
+| Unauthorized append | [`0x6aac…2b72`](https://explorer-studio.genlayer.com/tx/0x6aac452c377c4381b26ec42c43f3c819b02b2e90470149003d171e22c5212b72) | `CREATOR_ONLY`; snapshot count remains 0 |
+| Append bad digest | [`0x8f4f…0ea1`](https://explorer-studio.genlayer.com/tx/0x8f4f7f30809b22a70c4e52869398ab2db795100bb86e68a5cab8bc83c3680ea1) | Creates candidate 0 without advancing canonical pointer |
+| Assess bad digest | [`0xe1c9…c64e`](https://explorer-studio.genlayer.com/tx/0xe1c9ff41a622bcfdaeacd34efae14899c2769e91f4f1ab5038eff937059fc64e) | `SOURCE_UNVERIFIED`, `canonical=0` |
+| Append corrected digest | [`0x7b20…5c87`](https://explorer-studio.genlayer.com/tx/0x7b208220a8d5700bc28a0fb9d6a067bf61b7bc66920e6adaba6367f5a6bb5c87) | New immutable recovery candidate for the same non-canonical commit |
+| Assess corrected baseline | [`0x0d8f…78b7`](https://explorer-studio.genlayer.com/tx/0x0d8f75a87bbc061051ed0a9434c62c0789776fc006afe48438db0996cfec78b7) | `BASELINE_VERIFIED`, promotes snapshot 1 |
+| Append restricted commit | [`0x8b61…d1be`](https://explorer-studio.genlayer.com/tx/0x8b6163e8f2137145793fbbfd24403e8b9a347a312d3346932c2326b0f03bd1be) | Candidate 2 binds canonical parent 1 and sequence 1 |
+| Assess restricted commit | [`0x7bf2…a7a9`](https://explorer-studio.genlayer.com/tx/0x7bf2117690a3aeae36b8d9d55d792d15ec8c214136f78ae88ea69f1a51eca7a9) | Commit ancestry and bytes verified; `ACCESS_RESTRICTED` promoted |
 
-Validators fetched both immutable GitHub commits from the source bound in the watch, checked complete commit trees and blob identity, fetched raw policy bytes, recomputed their digests, and compared the scoped access semantics.
+## Poisoning attempt readback
 
-## Adversarial state-preservation checks
+Immediately after the bad-digest assessment:
 
-- Duplicate commit: [`0x40d3a2930f2d1d219a7666fd64ce318c39f54320d472c1e04e7c1c31fc6ddee2`](https://explorer-studio.genlayer.com/tx/0x40d3a2930f2d1d219a7666fd64ce318c39f54320d472c1e04e7c1c31fc6ddee2)
-- Reassess completed snapshot: [`0x09c4e27179516a039a40841d47fff74c01caaa2b9480b7c5e677835d211f1533`](https://explorer-studio.genlayer.com/tx/0x09c4e27179516a039a40841d47fff74c01caaa2b9480b7c5e677835d211f1533)
-- Unauthorized deactivation: [`0x87705752248992d0e5ca738fd5bf41738f9983be6df7ae5421e7988ad20f9e8b`](https://explorer-studio.genlayer.com/tx/0x87705752248992d0e5ca738fd5bf41738f9983be6df7ae5421e7988ad20f9e8b)
+- snapshot 0: `SOURCE_UNVERIFIED`, `canonical=0`, `provenance_ok=false`;
+- `latest_snapshot_id=-1`;
+- `snapshot_sequence=0`;
+- alert count `0`.
 
-For each adversarial call, the complete watch, snapshot, alert and counter state was captured before and after finalization and remained byte-for-byte unchanged. The watch remained active. No private credential or account-orchestration procedure is included in this public report.
+The invalid candidate therefore never became the parent of a future comparison.
+
+## Recovery and final canonical state
+
+- snapshot 1: `BASELINE_VERIFIED`, `canonical=1`, parent `-1`;
+- snapshot 2: `ACCESS_RESTRICTED`, `canonical=1`, parent snapshot `1`, sequence `1`;
+- watch: `latest_snapshot_id=2`, `snapshot_sequence=2`;
+- alert 0: `ACCESS_RESTRICTED`, affected `gptbot|/docs/private/`;
+- final counters: watches `1`, snapshots `3`, alerts `1`.
+
+This live sequence proves both halves of the remediation: an invalid candidate cannot poison canonical history, and a corrected immutable submission can recover without deleting the rejected audit record.

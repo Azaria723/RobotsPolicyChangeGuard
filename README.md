@@ -1,5 +1,7 @@
 # RobotsPolicyChangeGuard
 
+Current StudioNet deployment: [`0x5ad3db5e6658868dbad1e35538871B2c76a68f10`](https://explorer-studio.genlayer.com/address/0x5ad3db5e6658868dbad1e35538871B2c76a68f10).
+
 RobotsPolicyChangeGuard is a narrow GenLayer Intelligent Contract that detects material access changes between consecutive `robots.txt` or AI-crawler policy snapshots.
 
 It is intentionally not an authorization gate. The contract maintains a verified canonical snapshot chain, independently verifies each GitHub artifact and commit ordering, compares the current policy with its canonical parent through validator consensus, and emits an on-chain alert journal for restrictions or ambiguous rules.

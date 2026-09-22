@@ -22,10 +22,12 @@ The revision implements:
 
 ## Regression evidence
 
-Direct Mode: **20/20 passed**.
+Direct Mode: **21/21 passed**.
 
 New adversarial sequences cover unauthorized append, invalid-digest poisoning, corrected resubmission recovery, out-of-order commit ancestry, and competing pending candidates. Assertions compare canonical watch state before and after rejected assessments.
 
-## Deployment status
+## Live remediation proof
 
-The prior deployment predates this fix and must not be submitted as matching evidence. A new StudioNet deployment and live poisoning/recovery lifecycle are required before resubmission.
+The matching revision is deployed at [`0x5ad3db5e6658868dbad1e35538871B2c76a68f10`](https://explorer-studio.genlayer.com/address/0x5ad3db5e6658868dbad1e35538871B2c76a68f10). Deployed/local source parity is exact.
+
+The live sequence demonstrates unauthorized append rejection, bad-digest isolation with the canonical pointer still `-1`, corrected-digest resubmission for the same commit, baseline promotion, commit-ordered restriction promotion, and the expected alert. See [StudioNet verification](studionet-verification.md).
