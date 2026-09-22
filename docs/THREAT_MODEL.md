@@ -10,6 +10,11 @@
 | Policy text injects instructions | Prompt declares evidence untrusted and output is schema/allowlist validated. |
 | Model invents a crawler or path | Every affected entry must belong to the configured Cartesian product. |
 | Empty restriction claim | Restriction/expansion without affected entries becomes `AMBIGUOUS_POLICY`. |
-| Duplicate or retroactive history | Duplicate commits are rejected and parent links are assigned by contract state. |
+| Unauthorized chain poisoning | Only the watch creator may append candidates. |
+| Invalid digest becomes future parent | Append never advances the canonical pointer; only provenance-valid assessment promotes. |
+| Out-of-order or forked commit | A non-baseline candidate must directly descend from the canonical commit. |
+| Racing candidates rewrite ordering | Candidate binds canonical ID and sequence; after one promotion, competing candidates become stale. |
+| Invalid submission blocks recovery | Rejected record stays immutable and non-canonical; corrected digest may be resubmitted as a new record. |
+| Duplicate canonical history | Duplicate pending or canonical commits are rejected. |
 | Reassessment creates multiple alerts | Each snapshot can be assessed once. |
 | Unauthorized shutdown | Only the recorded watch creator may deactivate it. |
